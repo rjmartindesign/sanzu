@@ -681,6 +681,19 @@ h1 .studio-text {
         font-weight: 600;
     }
 
+.founder-attribution {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    letter-spacing: 0.02em;
+}
+
+.founder-attribution-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
 .social-icons {
     display: flex;
     justify-content: center;
