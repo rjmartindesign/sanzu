@@ -8,43 +8,46 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSmoothScroll();
     initializeNavbarInteraction();
 });
-
 /**
  * Initialize Newsletter Form
  * Handles email subscription with basic validation
  */
 function initializeNewsletter() {
     const form = document.getElementById('newsletterForm');
-    
     if (!form) return;
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         const emailInput = form.querySelector('input[type="email"]');
+        if (!emailInput) return;
+
         const email = emailInput.value.trim();
-        
+
         // Basic email validation
         if (!isValidEmail(email)) {
             showFormMessage('Please enter a valid email address.', 'error');
             return;
         }
-        
-        // Simulate form submission
+
         const button = form.querySelector('button[type="submit"]');
-        const originalText = button.textContent;
-        button.textContent = 'Subscribing...';
-        button.disabled = true;
-        
-        // Simulate API call with timeout
-        setTimeout(function() {
-            showFormMessage('Thank you! Check your email for confirmation.', 'success');
-            emailInput.value = '';
-            button.textContent = originalText;
-            button.disabled = false;
-        }, 1500);
+        const originalText = button ? button.textContent : '';
+
+        if (button) {
+            button.textContent = 'Subscribing...';
+            button.disabled = true;
+        }
+
+        // Show success message
+        showFormMessage('Thank you!', 'success');
+
+        // Small delay so user actually sees message
+        setTimeout(function () {
+            form.submit(); // real submit (bypasses event listener)
+        }, 1000);
     });
 }
+
 
 /**
  * Validate email format
