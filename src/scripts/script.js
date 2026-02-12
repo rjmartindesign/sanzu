@@ -4,7 +4,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    initializeNewsletter();
+    //initializeNewsletter();
     initializeSmoothScroll();
     initializeNavbarInteraction();
 });
@@ -39,7 +39,7 @@ function initializeNewsletter() {
         }
 
         // Show success message
-        showFormMessage('Thank you!', 'success');
+        showFormMessage('Thank you! Check your email for confirmation.', 'success');
 
         // Small delay so user actually sees message
         setTimeout(function () {
