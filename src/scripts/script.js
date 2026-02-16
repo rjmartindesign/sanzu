@@ -4,7 +4,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    //initializeNewsletter();
+    initializeNewsletter();
     initializeSmoothScroll();
     initializeNavbarInteraction();
 });
@@ -16,38 +16,49 @@ function initializeNewsletter() {
     const form = document.getElementById('newsletterForm');
     if (!form) return;
 
-    form.addEventListener('submit', function (e) {
+    const API_URL = "https://sanzu-studio-subscibe-c9emanc6ekg5cngm.uksouth-01.azurewebsites.net/api/subscribe";
+
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const emailInput = form.querySelector('input[type="email"]');
-        if (!emailInput) return;
-
         const email = emailInput.value.trim();
 
-        // Basic email validation
         if (!isValidEmail(email)) {
             showFormMessage('Please enter a valid email address.', 'error');
             return;
         }
 
         const button = form.querySelector('button[type="submit"]');
-        const originalText = button ? button.textContent : '';
+        const originalText = button.textContent;
+        button.textContent = 'Subscribing...';
+        button.disabled = true;
 
-        if (button) {
-            button.textContent = 'Subscribing...';
-            button.disabled = true;
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Subscription failed.');
+            }
+
+            showFormMessage('Thank you! Check your email for confirmation.', 'success');
+            emailInput.value = '';
+
+        } catch (err) {
+            console.error(err);
+            showFormMessage('Something went wrong. Please try again.', 'error');
+        } finally {
+            button.textContent = originalText;
+            button.disabled = false;
         }
-
-        // Show success message
-        showFormMessage('Thank you! Check your email for confirmation.', 'success');
-
-        // Small delay so user actually sees message
-        setTimeout(function () {
-            form.submit(); // real submit (bypasses event listener)
-        }, 1000);
     });
 }
-
 
 /**
  * Validate email format
